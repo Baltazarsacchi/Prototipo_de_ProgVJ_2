@@ -12,16 +12,18 @@ atrapado = false
 
 sentido = 0
 
-
+ataque = nil
 function love.load()--[[Funcion donde creo la ventana y doy valores a algunos datos]]
 
     love.window.setMode(ventana.ancho * ventana.escala, ventana.alto * ventana.escala)
 
     love.graphics.setDefaultFilter("nearest", "nearest")
     
-    jugador = Jugador:crear(ventana.ancho/2,ventana.alto/2,"img/Walk.png",3)
-    enemigo1 = Enemigo:crear(25,15,"img/enemigo_1.png")
-    enemigo2 = Enemigo:crear(25,15,"img/enemigo_2.png")
+    jugador = Jugador:crear(ventana.ancho/2,ventana.alto/2,16,16,"img/jugador.png",3)
+    enemigo1 = Enemigo:crear(16,16,"img/enemigo3.png",1,25)
+    enemigo2 = Enemigo:crear(16,16,"img/enemigo3.png",1,25)
+    enemigo3 = Enemigo:crear(16,16,"img/enemigo3.png",3,25)
+   
    
 
     lienzo = love.graphics.newCanvas(ventana.ancho,ventana.alto)--[[Inicializo un lienzo]]
@@ -46,6 +48,7 @@ function love.update(dt)--[[Movimiento inicial del jugador]]
     Jugador.movimiento(jugador,dt)
     Enemigo.movimiento(enemigo1,jugador.x,jugador.y,dt)
     Enemigo.movimiento(enemigo2,jugador.x,jugador.y,dt)
+    Enemigo.movimiento(enemigo3,jugador.x,jugador.y,dt)
 
     enemigo1.reinicio = colisiones(
         jugador.hitbox_x,
@@ -67,9 +70,19 @@ function love.update(dt)--[[Movimiento inicial del jugador]]
         enemigo2.ancho,
         enemigo2.alto
     ) 
+    enemigo3.reinicio = colisiones(
+        jugador.hitbox_x,
+        jugador.hitbox_y,
+        jugador.ancho,
+        jugador.alto,
+        enemigo3.hitbox_x,
+        enemigo3.hitbox_y,
+        enemigo3.ancho,
+        enemigo3.alto
+    ) 
     Jugador.golpeado(jugador,enemigo1.reinicio)
     Jugador.golpeado(jugador,enemigo2.reinicio)
-    
+    Jugador.golpeado(jugador,enemigo3.reinicio)
 end
 function debugHitbox()--[[Muestra las hitbox en pantalla]]
     
@@ -78,6 +91,7 @@ function debugHitbox()--[[Muestra las hitbox en pantalla]]
     Jugador.Hitbox(jugador)
     Enemigo.Hitbox(enemigo1)
     Enemigo.Hitbox(enemigo2)
+    Enemigo.Hitbox(enemigo3)
     love.graphics.setColor(1,1,1)
     
 end
@@ -90,10 +104,24 @@ function love.draw()--[[Dibuja en pantalla el lienzo con el jugador]]
        
         Enemigo.dibujar(enemigo1)
         Enemigo.dibujar(enemigo2)
-        Jugador.dibujo(jugador)
+        Enemigo.dibujar(enemigo3)
+        
         
         Enemigo.dano(enemigo1)
         Enemigo.dano(enemigo2)
+        Enemigo.dano(enemigo3)
+
+        love.graphics.setColor(0.54,0.27,0.07)
+        
+            love.graphics.rectangle("fill",0,0,15,ventana.alto) 
+            love.graphics.rectangle("fill",0,0,ventana.ancho,15) 
+            love.graphics.rectangle("fill",ventana.ancho-15,0,15,ventana.alto) 
+            love.graphics.rectangle("fill",0,ventana.alto-15,ventana.ancho,15) 
+        
+        love.graphics.setColor(1,1,1)
+
+        Jugador.dibujo(jugador)
+        
         if hitbox then
             debugHitbox()
         end
