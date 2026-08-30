@@ -29,7 +29,7 @@ function Enemigo:crear(al,anc,ruta,vi,vel)
         o.direccion = 2
     end
 
-    o.animacion = CrearAnimacion(ruta,3,anc,al,5,true,o.direccion)
+    o.animacion = CrearAnimacion(ruta,3,anc,al,5,true,o.direccion,1)
     
     o.ancho = anc
     o.alto = al
@@ -51,10 +51,14 @@ function Enemigo:crear(al,anc,ruta,vi,vel)
 
 end
 
-function Enemigo:dano()
+function Enemigo:dano(mus)
 
     if self.reinicio then 
     
+        if mus then
+            mus:stop()
+            mus:play()
+        end
         local sentido = math.random(1,4)
 
         if sentido == 1 then
@@ -133,6 +137,6 @@ function Enemigo:dibujar()
 end
 
 function Enemigo:Hitbox()
-     love.graphics.rectangle("line",self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
+    love.graphics.rectangle("line",self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
     
 end
