@@ -15,6 +15,8 @@ atrapado = false
 
 sentido = 0
 
+inicio = true
+
 ataque = nil
 
 mouse_x = 0
@@ -27,12 +29,12 @@ function love.load()--[[Funcion donde creo la ventana y doy valores a algunos da
     love.graphics.setDefaultFilter("nearest", "nearest")
     musica = love.audio.newSource("audio/golpe.mp3", "static")
     musica2 = love.audio.newSource("audio/reaparicion_enemigos.mp3", "static")
-    musica3 = love.audio.newSource("audio/fondo.ogg","stream")
+    musica_fondo = love.audio.newSource("audio/fondo.ogg","stream")
 
-    musica3:setLooping(true)
-    musica3:setVolume(0.5)
+    musica_fondo:setLooping(true)
+    musica_fondo:setVolume(0.5)
 
-    musica3:play()
+    musica_fondo:play()
     
     jugador = Jugador:crear(ventana.ancho/2,ventana.alto/2,16,16,"img/jugador.png",3)
     enemigo1 = Enemigo:crear(16,16,"img/enemigo1.png",1,25)
@@ -50,6 +52,9 @@ function love.keypressed(key)--[[Tecla para ver la hitbox]]
 
     if key == "h" then
         hitbox = not hitbox
+    end
+    if key == "m" then
+        inicio = false
     end
     if key == "r" and (jugador.vida<0 or jugador.puntos > 95) then
         enemigo1.reinicio = true
@@ -96,7 +101,7 @@ end
 function love.update(dt)--[[Movimiento inicial del jugador]]
 
     --[[Calculo de las hitbox]]
-    if jugador.vida>=0 then
+    if jugador.vida>=0 and inicio == false then
         
         disparo1:dispara(dt)
 
@@ -134,7 +139,7 @@ function love.draw()--[[Dibuja en pantalla el lienzo con el jugador]]
       
         love.graphics.clear()
        
-        if jugador.vida>=0 and jugador.puntos<100 then
+        if jugador.vida>=0 and jugador.puntos<100 and inicio == false then
             
             enemigo1:dibujar()
             enemigo2:dibujar()
@@ -156,7 +161,7 @@ function love.draw()--[[Dibuja en pantalla el lienzo con el jugador]]
                 debugHitbox()
 
             end
-        elseif jugador.vida<0 then
+        elseif jugador.vida<0 and inicio == false then
             love.graphics.rectangle("fill",ventana.ancho/3 + 10,ventana.alto/2 - 15,ventana.alto/2 - 10,30)
             
             love.graphics.setColor(0.54,0.27,0.07)
@@ -164,7 +169,7 @@ function love.draw()--[[Dibuja en pantalla el lienzo con el jugador]]
             love.graphics.print("Presiona R para reiniciar",ventana.ancho/3+10,ventana.ancho/2 - 25)
             
             love.graphics.setColor(1,1,1)
-        elseif jugador.puntos>=100 then
+        elseif jugador.puntos>=100 and inicio == false then
              love.graphics.rectangle("fill",ventana.ancho/3 + 10,ventana.alto/2 - 15,ventana.alto/2 - 10,30)
             
             love.graphics.setColor(0.65,0.85,0.75)
@@ -172,7 +177,16 @@ function love.draw()--[[Dibuja en pantalla el lienzo con el jugador]]
             love.graphics.print("Presiona R para reiniciar",ventana.ancho/3+10,ventana.ancho/2 - 25)
             
             love.graphics.setColor(1,1,1)
-        end     
+        else 
+
+            love.graphics.print("Prototipo numero 1",ventana.ancho/3,ventana.ancho/2 - 55)
+            love.graphics.print("Presiona M para iniciar",ventana.ancho/3-10,ventana.ancho/2 - 25)
+            love.graphics.print("Movimiento: 'W A S D",40,ventana.limite_y-(ventana.alto/4))
+            love.graphics.print("Apunta con el cursor y presiona Clic Izquierdo para disparar",20,ventana.limite_y-(ventana.alto/4)+20)
+            
+            
+        end
+        
     love.graphics.setCanvas()
     
     love.graphics.draw(lienzo, 0, 0, 0, ventana.escala, ventana.escala)
