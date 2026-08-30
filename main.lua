@@ -27,6 +27,12 @@ function love.load()--[[Funcion donde creo la ventana y doy valores a algunos da
     love.graphics.setDefaultFilter("nearest", "nearest")
     musica = love.audio.newSource("audio/golpe.mp3", "static")
     musica2 = love.audio.newSource("audio/reaparicion_enemigos.mp3", "static")
+    musica3 = love.audio.newSource("audio/fondo.ogg","stream")
+
+    musica3:setLooping(true)
+    musica3:setVolume(0.5)
+
+    musica3:play()
     
     jugador = Jugador:crear(ventana.ancho/2,ventana.alto/2,16,16,"img/jugador.png",3)
     enemigo1 = Enemigo:crear(16,16,"img/enemigo1.png",1,25)
@@ -45,7 +51,7 @@ function love.keypressed(key)--[[Tecla para ver la hitbox]]
     if key == "h" then
         hitbox = not hitbox
     end
-    if key == "r" and jugador.vida<0 then
+    if key == "r" and (jugador.vida<0 or jugador.puntos > 95) then
         enemigo1.reinicio = true
         enemigo2.reinicio = true
         enemigo3.reinicio = true
@@ -78,7 +84,7 @@ function enemigoDisparo(objeto1,objeto2)
 end
 function love.mousepressed(x,y,button)
     
-    if button == 1 then
+    if button == 1 and (disparo1.activo == false) then
         
         disparo1:activacion(jugador.x,jugador.y,x/ventana.escala,y/ventana.escala)
 

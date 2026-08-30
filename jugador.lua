@@ -82,12 +82,16 @@ function Jugador:dibujo()
     DibujarAnimacion(jugador.animacion, jugador.x, jugador.y, jugador.origen_x, jugador.origen_y)
     love.graphics.print("Vida : ",5,0,0,1,1)
     love.graphics.print(jugador.vida,45,0,0,1.1,1.1)
+    love.graphics.print("Puntos: ",250,0)
+    love.graphics.print(jugador.puntos,325,0,0,1.1,1.1)
+    love.graphics.print("/100",350,0,0,1.1,1.1)
 end
 
 function Jugador:reinicio(posX,posY,al,anc,vi)
 
     jugador.x = posX
     jugador.y = posY
+    jugador.puntos = 0
     jugador.direccion = 0
     jugador.velocidad = 75
     jugador.alto = al
