@@ -1,5 +1,5 @@
 
-function CrearAnimacion(imagen, limite, ancho, alto, velocidad, esVertical,Posicion,tamano)
+function CrearAnimacion(imagen, limite, ancho, alto, velocidad, esVertical,Posicion,tamano)--[Inicia y almecena la informacion que necesita la animacion]--
     local animacion = {}
 
     animacion.ancho = ancho
@@ -23,7 +23,7 @@ function CrearAnimacion(imagen, limite, ancho, alto, velocidad, esVertical,Posic
     end
     return animacion
 end
-function cambioDireccion(animacion,direccion)
+function cambioDireccion(animacion,direccion)--[Cambia la fila segun la direccion que tome el objeto que se anima]--
 
     animacion.quads = {}
     
@@ -40,7 +40,7 @@ function cambioDireccion(animacion,direccion)
 
     
 end
-function ActualizarAnimacion(animacion,dt, unaVez)
+function ActualizarAnimacion(animacion,dt, unaVez)--[Actualiza la posicion en el spritesheet]--
     if animacion.activado then
         animacion.indice = animacion.indice + (animacion.velocidad * dt)
         if animacion.indice >= #animacion.quads + 1 then
@@ -51,7 +51,7 @@ function ActualizarAnimacion(animacion,dt, unaVez)
         end
     end
 end
-function DibujarAnimacion(animacion, x, y, origen_x, origen_y)
+function DibujarAnimacion(animacion, x, y, origen_x, origen_y)--[Dibuja la animacion]--
     if animacion.activado then
         local i = math.floor(animacion.indice)
         love.graphics.draw(animacion.spritesheet, animacion.quads[i], x, y,0,animacion.tam,animacion.tam, origen_x, origen_y)
