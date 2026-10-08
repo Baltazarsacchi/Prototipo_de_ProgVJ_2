@@ -26,7 +26,6 @@ function Disparos:init(posX,posY,al,anc,sprite,mun)--[Inicia el disparo]--
     self.hitbox_x = 0
     self.hitbox_y = 0
 
-    self.sonido = love.audio.newSource("audio/Golpe_al_enemigo.mp3", "static")
     self:actualizar_Hitbox()
     self.mundo:add(self,self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
 
@@ -99,21 +98,24 @@ function Disparos:reinicio()--[Reinicia el disparo]--
 
 end
 function Disparos:colision()
-    
-    local Consulta, tipo = self:Colision() 
+     
+    if not self.activo then return false end
 
-    if Consulta then
-        
-        if tipo == 1 then
+    local pared = false
+    for _, otro in ipairs(self:Colision()) do
+        if otro.tipo == Tipo_OBJETO then
+            pared = true
+        elseif otro.tipo == Tipo_ENEMIGO then
+            love.event.push("sonido_disparo")
+            otro.hit = true
             self:reinicio()
-            self.sonido:setPitch(10)
-            self.sonido:play()
             return true
         end
-        if tipo == 5 then
-            self:reinicio()
-             return false
-        end
     end
+    if pared then
+        self:reinicio()
+        return false
+    end
+
     return false
 end

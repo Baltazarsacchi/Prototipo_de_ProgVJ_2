@@ -17,9 +17,9 @@ function HUD:init(vida, vida_maxima, puntos)
     love.handlers["actualizar"] = function(vida, vida_maxima, puntos)
         self:actualizar(vida, vida_maxima, puntos)
     end
-    love.handlers["sonido_jugador"] = function() self:sonido(self.jugador) end
-    love.handlers["sonido_disparo"] = function() self:sonido(self.disparo) end
-    love.handlers["sonido_enemigo"] = function() self:sonido(self.enemigo) end
+    love.handlers["sonido_jugador"] = function() self:sonido(self.jugador,2.0) end
+    love.handlers["sonido_disparo"] = function() self:sonido(self.disparo,10.0) end
+    love.handlers["sonido_enemigo"] = function() self:sonido(self.enemigo,2.0) end
    
 end
 function HUD:actualizar(vida, vida_maxima, puntos)
@@ -45,9 +45,10 @@ function HUD:Draw()
     love.graphics.print("/100",350,0,0,1.1,1.1)
 
 end
-function HUD:sonido(audio)
+function HUD:sonido(audio,x)
     audio:stop()
     audio:setVolume(0.25)
+    audio:setPitch(x)
     audio:play()
     
 end

@@ -124,25 +124,24 @@ end
 
 function Enemigo:colision()
 
-    local Consulta, tipo = self:Colision() 
-
-    if Consulta then
-        
-        if tipo == 1 then
+   function Enemigo:colision()
+    for _, otro in ipairs(self:Colision()) do
+        if otro.tipo == Tipo_JUGADOR then
             self.x = self.x_anterior
             self.y = self.y_anterior
-        end
-        if tipo == 2 then
-            self.x = self.x_anterior - 1 
-            self.y = self.y_anterior - 1
-        end
-        if tipo == 4 then
-            self.hit = true
-        end
-        if tipo == 5 then
-            self.x = self.x_anterior
-            self.y = self.y_anterior
-        end
+        elseif otro.tipo == Tipo_OBJETO then
 
+            local diferencia_x = otro.x - self.x
+            local diferencia_y = otro.y - self.y
+            local angulo = math.atan2(diferencia_y,diferencia_x ) --[Calcula el angulo con el que sale el disparos]--
+            self.dir_x = math.cos(angulo)
+            self.dir_y = math.sin(angulo)
+            self.x = self.x - self.dir_x
+            self.y = self.y - self.dir_y
+        end
     end
+
+    self:actualizar_Hitbox()
+    self.mundo:update(self, self.hitbox_x, self.hitbox_y, self.ancho, self.alto)
+end
 end

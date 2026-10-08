@@ -89,20 +89,18 @@ end
 
 function Jugador:colisiones()
 
-    local consulta, tipo = self:Colision()
-    if consulta  then 
-        if  tipo == 1 and not self.invulnerabilidad then
+    for _, otro in ipairs(self:Colision()) do
+        if otro.tipo == Tipo_ENEMIGO and not self.invulnerabilidad then
             self.invulnerabilidad = true
             Timer.after(2, function() self.invulnerabilidad = false end)
-            
-            self.vida = self.vida - 1 
+
+            self.vida = self.vida - 1
             love.event.push("sonido_jugador")
             love.event.push("actualizar", self.vida, self.vida_maxima, self.puntos)
-        
-        end
-        if tipo == 5 then
+        elseif otro.tipo == Tipo_OBJETO then
             self.x = self.x_anterior
             self.y = self.y_anterior
         end
     end
+
 end

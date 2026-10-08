@@ -20,15 +20,15 @@ end
 function Cuerpos:Colision()--[Se hace la verificacion de si hubo colision con el metodo AABB]--
 
     
-    local Tipo, cantidad = self.mundo:queryRect(self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
+    local items, n = self.mundo:queryRect(self.hitbox_x, self.hitbox_y, self.ancho, self.alto)
+    local otros = {}
 
-    for i=1, cantidad do
-        local objeto = Tipo[i]
-        if objeto ~= self then
-            return true , objeto.tipo
+    for i = 1, n do
+        if items[i] ~= self then
+            otros[#otros + 1] = items[i]
         end
     end
-    return false, 0
+    return otros
 end
 
 function Cuerpos:actualizar_Hitbox()--[Actualiza la hitbox de cada uno de los cuerpos]--
