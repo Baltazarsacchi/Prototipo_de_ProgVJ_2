@@ -20,10 +20,8 @@ function Jugador:init(posX,posY,al,anc,ruta,vi,mun)
     self.vida = vi
     self.vida_maxima = vi
     self.animacion = CrearAnimacion(ruta, 3, 16, 16, 5, true,self.direccion,1)
-    self.animacion.activado = true
     self.puntos = 0
-   
-    self.golpe = false
+   self.img = love.graphics.newImage(ruta)
     self.mundo = mun
 
     self.invulnerabilidad = false
@@ -34,13 +32,7 @@ function Jugador:init(posX,posY,al,anc,ruta,vi,mun)
 
 end
 
-function Jugador:golpeado(hit)
 
-    if hit then
-        
-    end
-    
-end
 function Jugador:puntaje(pun)
 
     self.puntos = self.puntos + pun
@@ -56,35 +48,26 @@ function Jugador:movimiento(dt)
 
         self.x = self.x + (self.velocidad * dt)
         cambioDireccion(self.animacion,3)
-
-        self.animacion.activa = true
        
     elseif (love.keyboard.isDown("left") or love.keyboard.isDown("a") ) then
 
         self.x = self.x - (self.velocidad * dt)
         cambioDireccion(self.animacion,2)
-        self.animacion.activa = true
         
     elseif (love.keyboard.isDown("up") or love.keyboard.isDown("w")) then
 
         self.y = self.y - (self.velocidad * dt)
-
         cambioDireccion(self.animacion,1)
-        self.animacion.activa = true
        
        
     elseif (love.keyboard.isDown("down") or love.keyboard.isDown("s")) then
 
         self.y = self.y + (self.velocidad * dt)
-        self.animacion.activa = true
         cambioDireccion(self.animacion,0)
-        
-    else
-        self.animacion.activa = false
-
+   
     end
 
-    love.event.push("actualizarVidas", self.vida, self.vida_maxima, self.puntos)
+    love.event.push("actualizar", self.vida, self.vida_maxima, self.puntos)
     ActualizarAnimacion(self.animacion,dt, false)
    
     self:actualizar_Hitbox()
@@ -94,8 +77,9 @@ end
 
 function Jugador:dibujo()
     
+   
     DibujarAnimacion(self.animacion, self.x, self.y, self.origen_x, self.origen_y)
-    
+   
 end
 
 function Jugador:Hitbox()
@@ -110,13 +94,11 @@ function Jugador:colisiones()
         if  tipo == 1 and not self.invulnerabilidad then
             self.invulnerabilidad = true
             Timer.after(2, function() self.invulnerabilidad = false end)
-            self.golpe = true
-            if self.golpe then
-                self.vida = self.vida - 1 
-                love.event.push("sonido_jugador")
-                love.event.push("actualizar", self.vida, self.vida_maxima, self.puntos)
-                self.golpe = false
-            end
+            
+            self.vida = self.vida - 1 
+            love.event.push("sonido_jugador")
+            love.event.push("actualizar", self.vida, self.vida_maxima, self.puntos)
+        
         end
         if tipo == 5 then
             self.x = self.x_anterior

@@ -19,15 +19,17 @@ function GestionEstados:cambiar(Estado_a_Cambiar, Parametros_Estado)
     
     self.actual:salida()
     self.actual = self.estado[Estado_a_Cambiar]()
+    self.nombre = Estado_a_Cambiar
     self.actual:ingresar(Parametros_Estado)
     
 end
 
-function GestionEstados:Guardar_posicion(estado)
+function GestionEstados:Guardar_posicion(estado,nombre)
 
     self.actual:salida()
     self.actual = estado
-    self.actual:ingresar()
+    self.nombre = nombre
+    self.actual:ingresar(estado)
 
     
 end

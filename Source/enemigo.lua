@@ -41,7 +41,7 @@ function Enemigo:init(x,y,al,anc,ruta,vi,vel,mun,estilo)--[Inicial al enemigo en
 end
 
 
-function Enemigo:dano(dt)
+function Enemigo:dano()
 
     if not self.hit then return end
 
@@ -104,7 +104,7 @@ function Enemigo:movimiento(x,y,dt)--[Hace que el enemigo se mueva siguiendo al 
             end
         end
 
-        self:dano(dt)
+        self:dano()
     --[[Calculo de las hitbox]]
     
     self:actualizar_Hitbox()
@@ -128,7 +128,14 @@ function Enemigo:colision()
 
     if Consulta then
         
-       
+        if tipo == 1 then
+            self.x = self.x_anterior
+            self.y = self.y_anterior
+        end
+        if tipo == 2 then
+            self.x = self.x_anterior - 1 
+            self.y = self.y_anterior - 1
+        end
         if tipo == 4 then
             self.hit = true
         end

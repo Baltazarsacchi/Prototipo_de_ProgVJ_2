@@ -13,11 +13,8 @@ ventana = {--[[Tabla de la venta]]
     mapa_alto = 0
 }
 hitbox = false
-inicio = true
-pause = false
-fin = false
 
-Texto_vidas = ""
+
 
 function love.load()--[[Funcion donde creo la ventana y doy valores a algunos datos]]
 
@@ -41,54 +38,33 @@ function love.load()--[[Funcion donde creo la ventana y doy valores a algunos da
     Maquina_Estados:cambiar("titulo")
     lienzo = love.graphics.newCanvas(ventana.ancho,ventana.alto)--[[Inicializo un lienzo]]
 
-    love.handlers.actualizarVidas = UIVidas
+   
     
-end
-
-function UIVidas(vidas)
-    
-    Texto_vidas = "Vidas: "..vidas
 end
 
 function love.keypressed(key)--[[Tecla para ver la hitbox]]
 
-    if key == "m" and inicio then
+    local nombre = Maquina_Estados.nombre
+    if key == "m" and nombre == "titulo" then
         Maquina_Estados:cambiar("jugar")
-        inicio = false
-    end
-    if key == "p" and not inicio then
-        pause = not pause
-        if pause then
-            local estadoJuego = Maquina_Estados.actual
-          
-            Maquina_Estados:cambiar("pause",estadoJuego)
-        else
-
-            local estadoJuego = Maquina_Estados.actual.estadoJuego
-            Maquina_Estados:Guardar_posicion(estadoJuego)
-        end
-    end
-     if key == "h" and not inicio then
-        hitbox = not hitbox
-    end
-    if key == "r" and (pause or fin) then
+    elseif key == "p" and nombre == "jugar" then
         
-        local estadoJuego = Maquina_Estados.actual
-        Maquina_Estados:cambiar("jugar",  estadoJuego)
-        inicio = false
-        pause = false
-        fin = false
-
-    end
-    if key == "escape" and (pause or fin) then
-        Maquina_Estados:cambiar("titulo")
-        inicio = true
-        pause = false
+        Maquina_Estados:cambiar("pause",Maquina_Estados.actual)
+    elseif key == "p" and nombre == "pause" then
+        Maquina_Estados:Guardar_posicion(Maquina_Estados.actual.estadoJuego,"jugar")
+    elseif key == "h" and nombre == "jugar" then
+        hitbox = not hitbox
+    elseif key == "r" and (nombre == "pause" or nombre == "fin_de_partida") then
+        Timer.clear()
+        Maquina_Estados:cambiar("jugar",Maquina_Estados.actual)
+    elseif key == "escape" and (nombre == "pause" or nombre == "fin_de_partida") then
+        Maquina_Estados:cambiar("titulo")  
     end
 end
 function love.mousepressed(x,y,button)
     
-    if button == 1 and not inicio and not fin and not pause then
+    local nombre = Maquina_Estados.nombre
+    if button == 1 and nombre == "jugar" then
         
         for i,disparo in ipairs(Maquina_Estados.actual.disparo) do
             if(not disparo.activo) then
@@ -112,9 +88,7 @@ function love.update(dt)--[[Movimiento inicial del jugador]]
 
     if Maquina_Estados.actual.Fin_del_Juego then
     
-        local estadoJuego = Maquina_Estados.actual
-        Maquina_Estados:cambiar("fin_de_partida",estadoJuego)
-        fin = true
+       Maquina_Estados:cambiar("fin_de_partida",Maquina_Estados.actual)
     end
 
 end
@@ -126,7 +100,6 @@ function love.draw()--[[Dibuja en pantalla el lienzo con el jugador]]
             
     love.graphics.clear()
     Maquina_Estados:dibujar()
-    love.graphics.printf(Texto_vidas, 0, 10, ventana.ancho, "center")
     love.graphics.setCanvas()
     
     love.graphics.draw(lienzo, 0, 0, 0, ventana.escala, ventana.escala)

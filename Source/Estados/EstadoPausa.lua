@@ -43,6 +43,7 @@ function EstadoPausa:dibujar()--[Dibuja a todos los elementos que estan en panta
     end 
     self.estadoJuego.mapa:drawLayer(self.estadoJuego.mapa.layers["Decoracion"])
     self.estadoJuego.camara:detach()
+    self.estadoJuego.hud:Draw()
     love.graphics.setColor(1,0,0) 
     love.graphics.print("PAUSA",ventana.ancho/2 - 10,ventana.alto/2 -5,0,1,1)
     love.graphics.setColor(1,1,1) 

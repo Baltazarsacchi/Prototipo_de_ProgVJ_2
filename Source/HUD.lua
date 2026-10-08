@@ -20,6 +20,7 @@ function HUD:init(vida, vida_maxima, puntos)
     love.handlers["sonido_jugador"] = function() self:sonido(self.jugador) end
     love.handlers["sonido_disparo"] = function() self:sonido(self.disparo) end
     love.handlers["sonido_enemigo"] = function() self:sonido(self.enemigo) end
+   
 end
 function HUD:actualizar(vida, vida_maxima, puntos)
 
