@@ -43,27 +43,29 @@ end
 
 function Enemigo:dano()
 
-    if not self.hit then return end
-
-    
-
-        if self.tiempo_recarga then
-            self.x = -16
-            self.y = 0
-            Timer.after(2, function() self.tiempo_recarga = true end)
-        else 
+    if not self.hit or self.tiempo_recarga then return end
         
+        self.mundo:remove(self)
+        self.hit = false
+        self.tiempo_recarga = true
+
+        Timer.after(3, function()  
             love.event.push("sonido_enemigo")
             self.x = self.posicion_inicial_x
             self.y = self.posicion_inicial_y
+            self:actualizar_Hitbox()
+            self.mundo:add(self, self.hitbox_x, self.hitbox_y, self.ancho, self.alto)
+            self.tiempo_recarga = false 
 
-            self.hit = false
-            self.tiempo_recarga = false
-        end
+        end)
 end
 
 
 function Enemigo:movimiento(x,y,dt)--[Hace que el enemigo se mueva siguiendo al jugador]--
+ 
+
+    self:dano()
+    if self.tiempo_recarga then return end
 
     self.x_anterior = self.x
     self.y_anterior = self.y
@@ -113,18 +115,20 @@ function Enemigo:movimiento(x,y,dt)--[Hace que el enemigo se mueva siguiendo al 
 end
 
 function Enemigo:dibujar()
-
+    if self.tiempo_recarga then return end
     DibujarAnimacion(self.animacion,self.x,self.y,self.origen_x,self.origen_y)
 end
 
 function Enemigo:Hitbox()
+    if self.tiempo_recarga then return end
     love.graphics.rectangle("line",self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
     
 end
 
 function Enemigo:colision()
 
-   function Enemigo:colision()
+    if self.tiempo_recarga then return end
+
     for _, otro in ipairs(self:Colision()) do
         if otro.tipo == Tipo_JUGADOR then
             self.x = self.x_anterior
@@ -140,8 +144,7 @@ function Enemigo:colision()
             self.y = self.y - self.dir_y
         end
     end
-
+    
     self:actualizar_Hitbox()
     self.mundo:update(self, self.hitbox_x, self.hitbox_y, self.ancho, self.alto)
-end
 end

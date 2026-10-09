@@ -21,7 +21,6 @@ function Jugador:init(posX,posY,al,anc,ruta,vi,mun)
     self.vida_maxima = vi
     self.animacion = CrearAnimacion(ruta, 3, 16, 16, 5, true,self.direccion,1)
     self.puntos = 0
-   self.img = love.graphics.newImage(ruta)
     self.mundo = mun
 
     self.invulnerabilidad = false
@@ -77,8 +76,11 @@ end
 
 function Jugador:dibujo()
     
-   
+    if self.invulnerabilidad then
+        love.graphics.setColor(1,0,0)
+    end
     DibujarAnimacion(self.animacion, self.x, self.y, self.origen_x, self.origen_y)
+    love.graphics.setColor(1,1,1)
    
 end
 

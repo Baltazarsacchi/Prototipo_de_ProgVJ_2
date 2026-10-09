@@ -12,8 +12,6 @@ function EstadosJuegar:init()--[Inicializa el juego con la carga del escenario, 
 
     self.mapa_ancho = self.mapa.width * self.mapa.tilewidth
     self.mapa_alto = self.mapa.height * self.mapa.tileheight
-
-    
     
     self.enemigos = {}--[Tabla Enemigos]--
     self.disparo = {}--[Tabla Disparos]--
@@ -43,7 +41,7 @@ function EstadosJuegar:init()--[Inicializa el juego con la carga del escenario, 
         end
     end
 
-    self.hud = HUD(self.jugador.vida, self.jugador.vida_maxima)
+    self.hud = HUD(self.jugador.vida, self.jugador.vida_maxima, self.jugador.puntos)
     lienzo = love.graphics.newCanvas(ventana.ancho,ventana.alto)
     self.Fin_del_Juego = false
     self.camara = Camara()
@@ -75,7 +73,7 @@ function EstadosJuegar:actualizar(dt)--[Actualiza los moviminetos del jugador, e
         for i,disparo in ipairs(self.disparo) do
             
             if disparo:colision() then
-                self.jugador:puntaje(10)
+                self.jugador:puntaje(5)
             end
         end
         for i,enemigo in ipairs(self.enemigos) do
@@ -149,6 +147,6 @@ function EstadosJuegar:dibujar()--[Dibuja en pantalla al jugador, disparos, enem
         end 
   
     self.camara:detach()
-    self.hud:Draw()
+    self.hud:DrawHUD()
 
 end

@@ -77,8 +77,9 @@ function Disparos:dibujo()--[Dibuja los disparo]--
 
     if self.activo == true then
    
+        love.graphics.setColor(1,0,0)
         DibujarAnimacion( self.animacion, self.x, self.y, self.origen_x, self.origen_y)
-
+        love.graphics.setColor(1,1,1)
     end
 end
 
