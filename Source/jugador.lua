@@ -25,7 +25,7 @@ function Jugador:init(posX,posY,al,anc,ruta,vi,mun)
 
     self.invulnerabilidad = false
     self.camara = Camara()
-  
+    love.handlers["invulnerabilidad"] = function(activa) self.invulnerabilidad = activa end
     self:actualizar_Hitbox()
     self.mundo:add(self,self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
 
@@ -66,9 +66,8 @@ function Jugador:movimiento(dt)
    
     end
 
-    love.event.push("actualizar", self.vida, self.vida_maxima, self.puntos)
     ActualizarAnimacion(self.animacion,dt, false)
-   
+
     self:actualizar_Hitbox()
     self.mundo:update(self,self.hitbox_x,self.hitbox_y,self.ancho,self.alto)
 
@@ -91,11 +90,13 @@ end
 
 function Jugador:colisiones()
 
-    for _, otro in ipairs(self:Colision()) do
-        if otro.tipo == Tipo_ENEMIGO and not self.invulnerabilidad then
-            self.invulnerabilidad = true
-            Timer.after(2, function() self.invulnerabilidad = false end)
+    local recibio_dano = false
 
+    for _, otro in ipairs(self:Colision()) do
+        if otro.tipo == Tipo_ENEMIGO and not self.invulnerabilidad and not recibio_dano then
+            love.event.push("invulnerabilidad", true)
+            Timer.after(2, function() love.event.push("invulnerabilidad", false) end)
+            recibio_dano = true
             self.vida = self.vida - 1
             love.event.push("sonido_jugador")
             love.event.push("actualizar", self.vida, self.vida_maxima, self.puntos)

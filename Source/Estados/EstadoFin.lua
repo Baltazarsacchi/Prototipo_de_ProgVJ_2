@@ -1,15 +1,21 @@
 EstadoFin = Class{__includes = Estados}
 
 
-function EstadoFin:init()end
+function EstadoFin:init() end
 function EstadoFin:ingresar(estadoJuego)--[Guarda informacion necesaria]--
     self.estadoJuego = estadoJuego
+    --[Chequea que estado del fin del juego se cumple y le da un sonido]--
+    if self.estadoJuego.jugador.vida<1 then
+        love.event.push("sonido_derrota")
+    else 
+        love.event.push("sonido_victoria")
+    end
 end
 function EstadoFin:salida()end
 function EstadoFin:actualizar(dt)end
 function EstadoFin:dibujar()--[Dibuja la pantalla del final del juego]--
 
-       
+    
     love.graphics.rectangle("fill",ventana.ancho/3 + 10,ventana.alto/2 - 15,ventana.alto/2 - 10,30)
             
     if self.estadoJuego.jugador.vida <1 then

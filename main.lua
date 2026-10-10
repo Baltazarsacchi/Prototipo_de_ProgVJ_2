@@ -21,12 +21,6 @@ function love.load()--[[Funcion donde creo la ventana y doy valores a algunos da
     love.window.setMode(ventana.ancho * ventana.escala, ventana.alto * ventana.escala)
 
     love.graphics.setDefaultFilter("nearest", "nearest")
-    musica_fondo = love.audio.newSource("audio/fondo.ogg","stream")
-
-    musica_fondo:setLooping(true)
-    musica_fondo:setVolume(0.2)
-
-    musica_fondo:play()
    
     Maquina_Estados = GestionEstados{
         [ 'titulo' ] = function() return EstadoTitulo() end,
@@ -38,7 +32,6 @@ function love.load()--[[Funcion donde creo la ventana y doy valores a algunos da
     Maquina_Estados:cambiar("titulo")
     lienzo = love.graphics.newCanvas(ventana.ancho,ventana.alto)--[[Inicializo un lienzo]]
 
-   
     
 end
 
@@ -46,9 +39,10 @@ function love.keypressed(key)--[[Tecla para ver la hitbox]]
 
     local nombre = Maquina_Estados.nombre
     if key == "m" and nombre == "titulo" then
+        
         Maquina_Estados:cambiar("jugar")
     elseif key == "p" and nombre == "jugar" then
-        
+       
         Maquina_Estados:cambiar("pause",Maquina_Estados.actual)
     elseif key == "p" and nombre == "pause" then
         Maquina_Estados:Guardar_posicion(Maquina_Estados.actual.estadoJuego,"jugar")
@@ -58,7 +52,8 @@ function love.keypressed(key)--[[Tecla para ver la hitbox]]
         Timer.clear()
         Maquina_Estados:cambiar("jugar",Maquina_Estados.actual)
     elseif key == "escape" and (nombre == "pause" or nombre == "fin_de_partida") then
-        Maquina_Estados:cambiar("titulo")  
+        Maquina_Estados:cambiar("titulo") 
+        Timer.clear()
     end
 end
 function love.mousepressed(x,y,button)
@@ -82,8 +77,11 @@ function love.mousepressed(x,y,button)
     end 
 end
 function love.update(dt)--[[Movimiento inicial del jugador]]
-  
-    Timer.update(dt) 
+   
+    if Maquina_Estados.nombre == "jugar" then
+        Timer.update(dt)
+    end
+     
     Maquina_Estados:actualizar(dt)
 
     if Maquina_Estados.actual.Fin_del_Juego then

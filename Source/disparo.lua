@@ -9,6 +9,7 @@ function Disparos:init(posX,posY,al,anc,sprite,mun)--[Inicia el disparo]--
     Cuerpos.init(self,Tipo_JUGADOR_DISPARO,mun)
 
     self.mundo = mun
+    --[Posicionamiento, velocidad y centrados de imagen del disparo]--
     self.x = posX
     self.y = posY
     self.dir_x = 0
@@ -19,10 +20,10 @@ function Disparos:init(posX,posY,al,anc,sprite,mun)--[Inicia el disparo]--
     self.origen_x = self.ancho / 2
     self.origen_y = self.alto / 2
     self.direccion = 1
+    --[Inicializacion de animacion]--
     self.animacion = CrearAnimacion(sprite, 3, 64, 64, 5, false,self.direccion,0.2)
     self.animacion.activado = false
 
-    self.time = 0
     self.hitbox_x = 0
     self.hitbox_y = 0
 
@@ -59,11 +60,8 @@ function Disparos:dispara(dt)--[Actualiza su posicion y verifica que el disparo 
     if self.activo == true then
         ActualizarAnimacion( self.animacion,dt, false)
         self.x = self.x + (self.dir_x * self.velocidad * dt)
-        self.y = self.y + (self.dir_y * self.velocidad * dt) 
+        self.y = self.y + (self.dir_y * self.velocidad * dt)
 
-        self.time = self.time + dt
-
-        
     end
     
 
@@ -98,7 +96,7 @@ function Disparos:reinicio()--[Reinicia el disparo]--
     self.activo = false
 
 end
-function Disparos:colision()
+function Disparos:colision()--[Chequea si colisiono y con que colisiono]--
      
     if not self.activo then return false end
 

@@ -1,6 +1,9 @@
 EstadoPausa = Class{__includes = Estados}
 
-function EstadoPausa:init()end
+function EstadoPausa:init()
+
+    love.event.push("sonido_inicio")--[Inicializa un sonido en pausa]--
+end
 function EstadoPausa:ingresar(estadoJuegar)--[Guarda informacion necesaria]--
 
     self.estadoJuego = estadoJuegar    
@@ -43,13 +46,9 @@ function EstadoPausa:dibujar()--[Dibuja a todos los elementos que estan en panta
     end 
     self.estadoJuego.mapa:drawLayer(self.estadoJuego.mapa.layers["Decoracion"])
     self.estadoJuego.camara:detach()
-    self.estadoJuego.hud:DrawHUD()
+    self.estadoJuego.hud:DrawHUD()--[Tambien dibuja la HUD en el momento que se pauso el juego]--
     love.graphics.setColor(1,0,0) 
     love.graphics.print("PAUSA",ventana.ancho/2 - 10,ventana.alto/2 -5,0,1,1)
     love.graphics.setColor(1,1,1) 
-           
-    
-    
-
 
 end

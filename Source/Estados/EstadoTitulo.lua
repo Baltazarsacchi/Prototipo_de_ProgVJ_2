@@ -2,6 +2,7 @@ EstadoTitulo = Class{__includes = Estados}
 
 function EstadoTitulo:init()
     self.mapa = STI("Mapa/Titulo.lua")
+    love.event.push("sonido_inicio")--[Inicializa el sonido de inicio]--
 end
 function EstadoTitulo:actualizar(dt) end
 function EstadoTitulo:ingresar()end
