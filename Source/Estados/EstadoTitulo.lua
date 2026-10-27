@@ -1,0 +1,23 @@
+EstadoTitulo = Class{__includes = Estados}
+
+function EstadoTitulo:init()
+    self.mapa = STI("Mapa/Titulo.lua")
+    love.event.push("sonido_inicio")--[Inicializa el sonido de inicio]--
+end
+function EstadoTitulo:actualizar(dt) end
+function EstadoTitulo:ingresar()end
+function EstadoTitulo:salida()end
+
+function EstadoTitulo:dibujar()--[Dibuja la interfaz del inicio del juego]--
+
+    self.mapa:drawLayer(self.mapa.layers["Titulo"]) 
+    love.graphics.setColor(1,0,0)
+    love.graphics.print("Prototipo numero 4",ventana.ancho/3,ventana.ancho/3 - 55)
+    love.graphics.print("Presiona M para iniciar",ventana.ancho/3-10,ventana.ancho/3 - 25)
+    love.graphics.print("Movimiento: 'W A S D",40,ventana.limite_y-(ventana.alto/4))
+    love.graphics.print("Pausa: 'P', Vueta al menu desde el juego: P + Esc",40,ventana.limite_y-(ventana.alto/4)+20)
+    love.graphics.print("Mostrar la Hitbox's: 'H'",40,ventana.limite_y-(ventana.alto/4)+40)
+    love.graphics.print("Apunta con el cursor y presiona Clic Izquierdo para disparar",20,ventana.limite_y-(ventana.alto/4)+60)
+    love.graphics.setColor(1,1,1)
+
+end
